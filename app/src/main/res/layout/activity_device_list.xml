@@ -1,9 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context="com.example.franciszeeek.electrocardiogramapplication.DeviceList">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="List of devices"
+        android:textAlignment="center"
+        android:textSize="30sp" />
+    <Button
+        android:id="@+id/btnSearchDevices"
+        android:layout_width="355dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorButton"
+        android:textColor="@color/colorTextButton"
+        android:text="search for devices" />
+
+    <ListView
+        android:id="@+id/listViewDevices"
+        android:layout_width="match_parent"
+        android:layout_height="346dp" />
+
+    <Button
+        android:id="@+id/btnCloseApp"
+        android:layout_width="355dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorButton"
+        android:textColor="@color/colorTextButton"
+        android:text="Close Applications" />
+</LinearLayout>
