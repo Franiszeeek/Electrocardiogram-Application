@@ -13,10 +13,15 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,6 +68,10 @@ public class MainActivity extends AppCompatActivity {
     private StringBuilder recDataString = new StringBuilder();
     private ConnectedThread mConnectedThread;
 
+    private final Handler mHandler = new Handler();
+    private Runnable mTimer;
+    private double graphLastXValue = 5d;
+    private LineGraphSeries<DataPoint> mSeries;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +97,22 @@ public class MainActivity extends AppCompatActivity {
         };
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
+        initGraph(graph);
+    }
+
+
+    public void initGraph(GraphView graph) {
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(200);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(-100);
+        graph.getViewport().setMaxY(100);
+
+        // first mSeries is a line
+        mSeries = new LineGraphSeries<>();
+        graph.addSeries(mSeries);
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -120,6 +145,22 @@ public class MainActivity extends AppCompatActivity {
         mConnectedThread = new ConnectedThread(btSocket);
         mConnectedThread.start();
         mConnectedThread.write("x");
+
+        mTimer = new Runnable() {
+            @Override
+            public void run() {
+                if (graphLastXValue == 200) {
+                    graphLastXValue = 0;
+                    mSeries.resetData(new DataPoint[]{
+                            new DataPoint(graphLastXValue, getRandom())
+                    });
+                }
+                graphLastXValue += 1d;
+                mSeries.appendData(new DataPoint(graphLastXValue, getRandom()), false, 150);
+                mHandler.postDelayed(this, 50);
+            }
+        };
+        mHandler.postDelayed(mTimer, 700);
     }
 
     private void checkBTState() {
@@ -187,5 +228,11 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Error", e);
 
         }
+        mHandler.removeCallbacks(mTimer);
+    }
+    double mLastRandom = 2;
+    private double getRandom() {
+        mLastRandom++;
+        return Math.sin(mLastRandom*0.5) * 10 * (Math.random() * 10 + 1);
     }
 }
