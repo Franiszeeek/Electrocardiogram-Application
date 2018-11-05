@@ -1,28 +1,20 @@
 package com.example.franciszeeek.electrocardiogramapplication;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.button3)
     void OnClick_F3() {
-
+        Disconnect();
     }
 
     @BindView(R.id.txtView1)
@@ -79,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        final double[] liczba = {0};
+
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
                 if (msg.what == handlerState) {
@@ -88,13 +82,32 @@ public class MainActivity extends AppCompatActivity {
                         String dataInPrint = readMessage.substring(0, endOfLineIndex);
                         if (dataInPrint.charAt(0) == '#')								//if it starts with # we know it is what we are looking for
                         {
-                            String data = dataInPrint.substring(1, endOfLineIndex);
+                            final String data = dataInPrint.substring(1, endOfLineIndex);
                             txtView1.setText(data);
+                            liczba[0] = Double.parseDouble(data);
                         }
+
                     }
                 }
             }
         };
+
+        mTimer = new Runnable() {
+            @Override
+            public void run() {
+                if (graphLastXValue == 200) {
+                    graphLastXValue = 0;
+                    mSeries.resetData(new DataPoint[]{
+                            new DataPoint(graphLastXValue, liczba[0])
+                    });
+                }
+                graphLastXValue += 1d;
+                mSeries.appendData(new DataPoint(graphLastXValue, liczba[0]), false, 150);
+                mHandler.postDelayed(this, 50);
+            }
+        };
+        mHandler.postDelayed(mTimer, 700);
+
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
         initGraph(graph);
@@ -104,11 +117,15 @@ public class MainActivity extends AppCompatActivity {
     public void initGraph(GraphView graph) {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(200);
+        graph.getViewport().setMaxX(210);
 
         graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(-100);
-        graph.getViewport().setMaxY(100);
+        graph.getViewport().setMinY(0);
+        graph.getViewport().setMaxY(1023);
+
+        graph.setTitle("Title");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("axis X");
+        graph.getGridLabelRenderer().setVerticalAxisTitle("axis Y");
 
         // first mSeries is a line
         mSeries = new LineGraphSeries<>();
@@ -146,21 +163,7 @@ public class MainActivity extends AppCompatActivity {
         mConnectedThread.start();
         mConnectedThread.write("x");
 
-        mTimer = new Runnable() {
-            @Override
-            public void run() {
-                if (graphLastXValue == 200) {
-                    graphLastXValue = 0;
-                    mSeries.resetData(new DataPoint[]{
-                            new DataPoint(graphLastXValue, getRandom())
-                    });
-                }
-                graphLastXValue += 1d;
-                mSeries.appendData(new DataPoint(graphLastXValue, getRandom()), false, 150);
-                mHandler.postDelayed(this, 50);
-            }
-        };
-        mHandler.postDelayed(mTimer, 700);
+
     }
 
     private void checkBTState() {
@@ -230,9 +233,18 @@ public class MainActivity extends AppCompatActivity {
         }
         mHandler.removeCallbacks(mTimer);
     }
-    double mLastRandom = 2;
-    private double getRandom() {
-        mLastRandom++;
-        return Math.sin(mLastRandom*0.5) * 10 * (Math.random() * 10 + 1);
+
+
+    private void Disconnect() {
+        if (btSocket != null)
+        {
+            try {
+                btSocket.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error", e);
+            }
+        }
+        finish();
     }
+
 }
