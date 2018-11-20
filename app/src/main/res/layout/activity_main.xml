@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorTextButton"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.franciszeeek.electrocardiogramapplication.MainActivity">
 
     <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph"
-        android:layout_width="340dp"
-        android:layout_height="200dp"
+        android:id="@+id/graph1"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
         />
 
     <TextView
@@ -20,47 +21,65 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
-        android:text="txtView1"
+        android:text="Signal"
         android:textAlignment="center"
-        android:textColor="@color/colorTextButton"
-        android:textSize="50sp" />
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph2"
+        android:layout_width="350dp"
+        android:layout_height="150dp"
+        />
+
+    <TextView
+        android:id="@+id/txtView2"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="5dp"
+        android:text="BPM"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp" />
+    <!--
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:backgroundTint="@color/colorButton"
-            android:text="Button 1"
-            android:textColor="@color/colorTextButton" />
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:backgroundTint="@color/colorButton"
+                android:text="Button 1"
+                android:textColor="@color/colorTextButton" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="150dp"
-            android:layout_height="100dp"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="20dp"
-            android:backgroundTint="@color/colorButton"
-            android:text="Button 2"
-            android:textColor="@color/colorTextButton" />
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="150dp"
+                android:layout_height="100dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:backgroundTint="@color/colorButton"
+                android:text="Button 2"
+                android:textColor="@color/colorTextButton" />
+        </LinearLayout>
+     -->
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="320dp"
+                android:layout_height="40dp"
+                android:backgroundTint="@color/colorButton"
+                android:text="Disconnect"
+                android:textColor="@color/colorTextButton" />
+        </LinearLayout>
+
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="320dp"
-            android:layout_height="50dp"
-            android:backgroundTint="@color/colorButton"
-            android:text="Disconnect"
-            android:textColor="@color/colorTextButton" />
-    </LinearLayout>
-
-</LinearLayout>

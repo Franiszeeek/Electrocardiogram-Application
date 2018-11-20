@@ -1,6 +1,6 @@
 package com.example.franciszeeek.electrocardiogramapplication;
 
-import android.graphics.Color;
+
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.ProgressDialog;
@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-
+/*
     @OnClick(R.id.button1)
     void OnClick_F1() {
 
@@ -34,18 +34,24 @@ public class MainActivity extends AppCompatActivity {
     void OnClick_F2() {
 
     }
-
+*/
     @OnClick(R.id.button3)
     void OnClick_F3() {
         Disconnect();
     }
 
+
     @BindView(R.id.txtView1)
     TextView txtView1;
 
+    @BindView(R.id.txtView2)
+    TextView txtView2;
 
-    @BindView(R.id.graph)
-    GraphView graph;
+    @BindView(R.id.graph1)
+    GraphView graph1;
+
+    @BindView(R.id.graph2)
+    GraphView graph2;
 
     String address = null;
     private ProgressDialog progress;
@@ -63,7 +69,9 @@ public class MainActivity extends AppCompatActivity {
     private final Handler mHandler = new Handler();
     private Runnable mTimer;
     private double graphLastXValue = 5d;
-    private LineGraphSeries<DataPoint> mSeries;
+    private LineGraphSeries<DataPoint> mSeries1;
+    private LineGraphSeries<DataPoint> mSeries2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +79,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        final double[] liczba = {0};
+        final double[] signal = {0};
+        final int[] bpm = {0};
+
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
+                String[] splitData;
                 if (msg.what == handlerState) {
                     String readMessage = (String) msg.obj;
                     int endOfLineIndex = readMessage.indexOf("~");
@@ -83,8 +94,14 @@ public class MainActivity extends AppCompatActivity {
                         if (dataInPrint.charAt(0) == '#')								//if it starts with # we know it is what we are looking for
                         {
                             final String data = dataInPrint.substring(1, endOfLineIndex);
-                            txtView1.setText(data);
-                            liczba[0] = Double.parseDouble(data);
+                            splitData = data.split(":");
+
+                            txtView1.setText(splitData[0]);
+                            txtView2.setText(splitData[1]);
+
+                            signal[0] = Double.parseDouble(splitData[0]);
+                            bpm[0] = Integer.parseInt(splitData[1]);
+
                         }
 
                     }
@@ -95,41 +112,68 @@ public class MainActivity extends AppCompatActivity {
         mTimer = new Runnable() {
             @Override
             public void run() {
-                if (graphLastXValue == 200) {
+                if (graphLastXValue == 250) {
                     graphLastXValue = 0;
-                    mSeries.resetData(new DataPoint[]{
-                            new DataPoint(graphLastXValue, liczba[0])
+                    mSeries1.resetData(new DataPoint[]{
+                            new DataPoint(graphLastXValue, signal[0])
+                    });
+                    mSeries2.resetData(new DataPoint[]{
+                            new DataPoint(graphLastXValue, bpm[0])
                     });
                 }
                 graphLastXValue += 1d;
-                mSeries.appendData(new DataPoint(graphLastXValue, liczba[0]), false, 150);
+                mSeries1.appendData(new DataPoint(graphLastXValue, signal[0]), false, 200);
+                mSeries2.appendData(new DataPoint(graphLastXValue, bpm[0]), false, 200);
+
                 mHandler.postDelayed(this, 50);
             }
         };
-        mHandler.postDelayed(mTimer, 700);
+        mHandler.postDelayed(mTimer, 1000);
+
+
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
-        initGraph(graph);
+        initGraph1(graph1);
+        initGraph2(graph2);
+
     }
 
 
-    public void initGraph(GraphView graph) {
+    public void initGraph1(GraphView graph) {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(210);
+        graph.getViewport().setMaxX(260);
 
         graph.getViewport().setYAxisBoundsManual(true);
         graph.getViewport().setMinY(0);
-        graph.getViewport().setMaxY(1023);
+        graph.getViewport().setMaxY(5);
 
-        graph.setTitle("Title");
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("axis X");
-        graph.getGridLabelRenderer().setVerticalAxisTitle("axis Y");
+        graph.setTitle("Signal HR");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Sensor amplitude [V]");
 
         // first mSeries is a line
-        mSeries = new LineGraphSeries<>();
-        graph.addSeries(mSeries);
+        mSeries1 = new LineGraphSeries<>();
+        graph.addSeries(mSeries1);
+    }
+
+    public void initGraph2(GraphView graph) {
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setMaxX(260);
+
+        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMinY(50);
+        graph.getViewport().setMaxY(100);
+
+        graph.setTitle("HR [bmp]");
+        graph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
+        graph.getGridLabelRenderer().setVerticalAxisTitle("Beats per minute");
+
+        // first mSeries is a line
+        mSeries2 = new LineGraphSeries<>();
+        graph.addSeries(mSeries2);
     }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
@@ -198,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void run() {
-            byte[] buffer = new byte[256];
+            byte[] buffer = new byte[128];
             int bytes;
 
             while (true) {
