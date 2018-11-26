@@ -1,6 +1,7 @@
 package com.example.franciszeeek.electrocardiogramapplication;
 
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.app.ProgressDialog;
@@ -27,12 +28,9 @@ public class MainActivity extends AppCompatActivity {
 /*
     @OnClick(R.id.button1)
     void OnClick_F1() {
-
     }
-
     @OnClick(R.id.button2)
     void OnClick_F2() {
-
     }
 */
     @OnClick(R.id.button3)
@@ -96,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                             final String data = dataInPrint.substring(1, endOfLineIndex);
                             splitData = data.split(":");
 
-                            txtView1.setText(splitData[0]);
+                            //txtView1.setText(splitData[0]);
                             txtView2.setText(splitData[1]);
 
                             signal[0] = Double.parseDouble(splitData[0]);
@@ -112,67 +110,57 @@ public class MainActivity extends AppCompatActivity {
         mTimer = new Runnable() {
             @Override
             public void run() {
-                if (graphLastXValue == 250) {
-                    graphLastXValue = 0;
-                    mSeries1.resetData(new DataPoint[]{
-                            new DataPoint(graphLastXValue, signal[0])
-                    });
-                    mSeries2.resetData(new DataPoint[]{
-                            new DataPoint(graphLastXValue, bpm[0])
-                    });
-                }
                 graphLastXValue += 1d;
-                mSeries1.appendData(new DataPoint(graphLastXValue, signal[0]), false, 200);
-                mSeries2.appendData(new DataPoint(graphLastXValue, bpm[0]), false, 200);
-
-                mHandler.postDelayed(this, 50);
+                mSeries1.appendData(new DataPoint(graphLastXValue, signal[0]), true, 100);
+                mSeries2.appendData(new DataPoint(graphLastXValue, bpm[0]), true, 600);
+                mHandler.postDelayed(this, 1);
             }
         };
-        mHandler.postDelayed(mTimer, 1000);
-
-
+        mHandler.postDelayed(mTimer, 1);
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
         initGraph1(graph1);
         initGraph2(graph2);
-
     }
-
 
     public void initGraph1(GraphView graph) {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(260);
-
-        graph.getViewport().setYAxisBoundsManual(true);
+        graph.getViewport().setMaxX(100);
         graph.getViewport().setMinY(0);
         graph.getViewport().setMaxY(5);
 
-        graph.setTitle("Signal HR");
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
-        graph.getGridLabelRenderer().setVerticalAxisTitle("Sensor amplitude [V]");
+        graph.getGridLabelRenderer().setLabelVerticalWidth(80);
+        graph.getGridLabelRenderer().setVerticalLabelsVisible(false);
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        graph.getGridLabelRenderer().setGridColor(Color.RED);
 
-        // first mSeries is a line
+
         mSeries1 = new LineGraphSeries<>();
+        mSeries1.setDrawDataPoints(false);
+        mSeries1.setDrawBackground(false);
+        mSeries1.setColor(Color.RED);
+
+
         graph.addSeries(mSeries1);
     }
 
     public void initGraph2(GraphView graph) {
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
-        graph.getViewport().setMaxX(260);
+        graph.getViewport().setMaxX(600);
 
-        graph.getViewport().setYAxisBoundsManual(true);
-        graph.getViewport().setMinY(50);
-        graph.getViewport().setMaxY(100);
+        graph.getGridLabelRenderer().setLabelVerticalWidth(50);
+        graph.getGridLabelRenderer().setHorizontalLabelsVisible(false);
+        graph.getGridLabelRenderer().setVerticalLabelsColor(Color.RED);
+        graph.getGridLabelRenderer().setGridColor(Color.RED);
 
-        graph.setTitle("HR [bmp]");
-        graph.getGridLabelRenderer().setHorizontalAxisTitle("Time");
-        graph.getGridLabelRenderer().setVerticalAxisTitle("Beats per minute");
-
-        // first mSeries is a line
         mSeries2 = new LineGraphSeries<>();
+        mSeries2.setDrawDataPoints(false);
+        mSeries2.setDrawBackground(true);
+        mSeries2.setColor(Color.RED);
+
         graph.addSeries(mSeries2);
     }
 
@@ -206,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         mConnectedThread = new ConnectedThread(btSocket);
         mConnectedThread.start();
         mConnectedThread.write("x");
+
 
 
     }

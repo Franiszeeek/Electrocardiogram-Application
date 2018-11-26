@@ -4,82 +4,89 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorTextButton"
+    android:background="@color/colorBackground"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.franciszeeek.electrocardiogramapplication.MainActivity">
-
-    <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph1"
-        android:layout_width="350dp"
-        android:layout_height="150dp"
-        />
 
     <TextView
         android:id="@+id/txtView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:text="Signal"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="25sp" />
 
     <com.jjoe64.graphview.GraphView
-        android:id="@+id/graph2"
-        android:layout_width="350dp"
+        android:id="@+id/graph1"
+        android:layout_width="370dp"
         android:layout_height="150dp"
         />
 
     <TextView
-        android:id="@+id/txtView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:text="BPM"
+        android:layout_marginTop="15dp"
+        android:text="Heart Rate"
         android:textAlignment="center"
         android:textColor="@color/colorPrimaryDark"
         android:textSize="25sp" />
-    <!--
-        <LinearLayout
-            android:layout_width="wrap_content"
+
+    <com.jjoe64.graphview.GraphView
+        android:id="@+id/graph2"
+        android:layout_width="370dp"
+        android:layout_height="150dp"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="HR: "
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp" />
 
-            <Button
-                android:id="@+id/button1"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:backgroundTint="@color/colorButton"
-                android:text="Button 1"
-                android:textColor="@color/colorTextButton" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="150dp"
-                android:layout_height="100dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:backgroundTint="@color/colorButton"
-                android:text="Button 2"
-                android:textColor="@color/colorTextButton" />
-        </LinearLayout>
-     -->
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/txtView2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="Value"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text=" [bpm]"
+            android:textAlignment="center"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="25sp" />
+
+    </LinearLayout>
 
             <Button
                 android:id="@+id/button3"
-                android:layout_width="320dp"
-                android:layout_height="40dp"
+                android:layout_width="370dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
                 android:backgroundTint="@color/colorButton"
                 android:text="Disconnect"
                 android:textColor="@color/colorTextButton" />
-        </LinearLayout>
 
-    </LinearLayout>
+</LinearLayout>
