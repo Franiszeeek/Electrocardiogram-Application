@@ -25,14 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
-/*
-    @OnClick(R.id.button1)
-    void OnClick_F1() {
-    }
-    @OnClick(R.id.button2)
-    void OnClick_F2() {
-    }
-*/
+
     @OnClick(R.id.button3)
     void OnClick_F3() {
         Disconnect();

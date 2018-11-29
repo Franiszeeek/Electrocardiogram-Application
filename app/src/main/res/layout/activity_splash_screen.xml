@@ -14,13 +14,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Projekt Inżynierski 2019"
-        android:textColor="@color/colorTextButton"
+        android:textColor="@color/colorTextWhite"
         android:textSize="32sp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Maciej Mysiński"
-        android:textColor="@color/colorTextButton"
+        android:textColor="@color/colorTextWhite"
         android:textSize="26sp" />
 
 </LinearLayout>

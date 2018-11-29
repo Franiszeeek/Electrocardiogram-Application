@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
+    android:background="@color/colorBackgroundBlack"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.franciszeeek.electrocardiogramapplication.MainActivity">
@@ -17,7 +17,7 @@
         android:layout_marginBottom="5dp"
         android:text="Signal"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorTextWhite"
         android:textSize="25sp" />
 
     <com.jjoe64.graphview.GraphView
@@ -33,7 +33,7 @@
         android:layout_marginTop="15dp"
         android:text="Heart Rate"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorTextWhite"
         android:textSize="25sp" />
 
     <com.jjoe64.graphview.GraphView
@@ -54,7 +54,7 @@
             android:layout_marginTop="5dp"
             android:text="HR: "
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextWhite"
             android:textSize="25sp" />
 
         <TextView
@@ -65,7 +65,7 @@
             android:layout_marginTop="5dp"
             android:text="Value"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextWhite"
             android:textSize="25sp" />
 
         <TextView
@@ -75,7 +75,7 @@
             android:layout_marginTop="5dp"
             android:text=" [bpm]"
             android:textAlignment="center"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextWhite"
             android:textSize="25sp" />
 
     </LinearLayout>
@@ -87,6 +87,6 @@
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/colorButton"
                 android:text="Disconnect"
-                android:textColor="@color/colorTextButton" />
+                android:textColor="@color/colorTextWhite" />
 
 </LinearLayout>
